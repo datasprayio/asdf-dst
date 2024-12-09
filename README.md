@@ -1,8 +1,8 @@
 <div align="center">
 
-# asdf-app [![Build](https://github.com/datasprayio/asdf-dst/actions/workflows/build.yml/badge.svg)](https://github.com/datasprayio/asdf-dst/actions/workflows/build.yml)
+# asdf-dst [![Build](https://github.com/datasprayio/asdf-dst/actions/workflows/build.yml/badge.svg)](https://github.com/datasprayio/asdf-dst/actions/workflows/build.yml)
 
-[app](https://dataspray.io) plugin for the [asdf version manager](https://asdf-vm.com).
+[dst](https://dataspray.io) plugin for the [asdf version manager](https://asdf-vm.com).
 
 </div>
 
@@ -21,25 +21,25 @@
 Plugin:
 
 ```shell
-asdf plugin add app
+asdf plugin add dst
 # or
-asdf plugin add app https://github.com/datasprayio/asdf-dst.git
+asdf plugin add dst https://github.com/datasprayio/asdf-dst.git
 ```
 
-app:
+dst:
 
 ```shell
 # Show all installable versions
-asdf list-all app
+asdf list-all dst
 
 # Install specific version
-asdf install app latest
+asdf install dst latest
 
 # Set a version globally (on your ~/.tool-versions file)
-asdf global app latest
+asdf global dst latest
 
-# Now app commands are available
-app --version
+# Now dst commands are available
+dst --version
 ```
 
 Check [asdf](https://github.com/asdf-vm/asdf) readme for more instructions on how to install & manage versions.
