@@ -57,7 +57,7 @@ list_all_versions() {
 download_release() {
   local version="$1"
   local filename="$2"
-  local url="https://github.com/datasprayio/dataspray/releases/download/cli-$version/dst-jar-.zip"
+  local url="https://github.com/datasprayio/dataspray/releases/download/cli-$version/dst-jar-$version.zip"
 
   echo "* Downloading $TOOL_NAME release $version..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
