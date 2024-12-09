@@ -76,7 +76,7 @@ extract_release() {
       set -e
 
       cd "$tmp_download_dir"
-      unzip -q "$filename" && mv "quarkus"/* "$ASDF_DOWNLOAD_PATH"
+      unzip -q "$filename" && mv "bin"/* "$ASDF_DOWNLOAD_PATH"
     )
   else
     tar -xvf $filename -C "$ASDF_DOWNLOAD_PATH" --strip-components=1
@@ -98,6 +98,7 @@ install_version() {
 
     local tool_cmd
     tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
+    chmod +x "$install_path/bin/$tool_cmd"
     test -x "$install_path/bin/$tool_cmd" || fail "Expected $install_path/bin/$tool_cmd to be executable."
 
     echo "$TOOL_NAME $version installation was successful!"
