@@ -39,7 +39,7 @@ download_release() {
   local version="$1"
   local filename="$2"
   # TODO: Adapt the release URL convention for app
-  local url="https://github.com/datasprayio/dataspray/releases/download/cli-$version/dst-jar-$version.zip"
+  local url="https://github.com/datasprayio/dataspray/releases/download/$version/dst-jar-$version.zip"
 
   echo "* Downloading $TOOL_NAME release $version..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
