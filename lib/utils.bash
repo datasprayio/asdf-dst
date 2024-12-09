@@ -1,5 +1,27 @@
 #!/usr/bin/env bash
 
+#
+# Copyright 2024 Matus Faro
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+
 set -euo pipefail
 
 TOOL_REPO="https://github.com/datasprayio/dataspray"
@@ -13,7 +35,6 @@ fail() {
 
 curl_opts=(-fsSL)
 
-# NOTE: You might want to remove this if dst is not hosted on GitHub releases.
 if [ -n "${GITHUB_API_TOKEN:-}" ]; then
   curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
@@ -25,21 +46,18 @@ sort_versions() {
 
 list_github_tags() {
   git ls-remote --tags --refs "$TOOL_REPO" |
-    grep -o 'refs/tags/.*' | cut -d/ -f3- |
-    sed 's/^v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
+    grep -o 'refs/tags/cli-.*' | cut -d/ -f3- |
+    sed 's/^cli-//'
 }
 
 list_all_versions() {
-  # TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-  # Change this function ifdst has other means of determining installable versions.
   list_github_tags
 }
 
 download_release() {
   local version="$1"
   local filename="$2"
-  # TODO: Adapt the release URL convention for dst
-  local url="https://github.com/datasprayio/dataspray/releases/download/cli-$version/dst-jar-$version.zip"
+  local url="https://github.com/datasprayio/dataspray/releases/download/cli-$version/dst-jar-.zip"
 
   echo "* Downloading $TOOL_NAME release $version..."
   curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -74,15 +92,10 @@ install_version() {
     fail "asdf-$TOOL_NAME supports release installs only"
   fi
 
-  if ! which java >/dev/null; then
-    fail "You need a Java Runtime already installed on your computer.n\"Follow the instructions for your platform or download it\nwith asdf-java: https://github.com/halcyon/asdf-java/"
-  fi
-
   (
     mkdir -p "$install_path"
     cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
 
-    # TODO: Assert dst executable exists.
     local tool_cmd
     tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
     test -x "$install_path/bin/$tool_cmd" || fail "Expected $install_path/bin/$tool_cmd to be executable."
