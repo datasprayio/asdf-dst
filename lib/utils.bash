@@ -76,7 +76,7 @@ extract_release() {
       set -e
 
       cd "$tmp_download_dir"
-      unzip -q "$filename" && mv "quarkus"/* "$ASDF_DOWNLOAD_PATH"
+      unzip -q "$filename" && mv "bin"/* "$ASDF_DOWNLOAD_PATH"
     )
   else
     tar -xvf $filename -C "$ASDF_DOWNLOAD_PATH" --strip-components=1
@@ -97,9 +97,10 @@ install_version() {
     cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
 
     local tool_cmd
-    eval "$install_path/bin/$TOOL_TEST" >/dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        fail "Failed to test run tool with $install_path/bin/$TOOL_TEST"
+    eval "$TOOL_TEST" >/dev/null 2>&1
+    if [ $RETURN_CODE -ne 0 ]; then
+        echo "Command failed with return code $RETURN_CODE."
+        fail "Failed to test execution of $install_path/bin/$tool_cmd"
     fi
 
     echo "$TOOL_NAME $version installation was successful!"
